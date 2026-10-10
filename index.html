@@ -1,0 +1,1093 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bulmaca Masası (deneme)</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="description" content="Türkçe kare bulmaca: her seferinde yeni, anında kuruluyor. 5×5'ten 23×23'e boyutunu seç, tarayıcında çöz, kaydet ve yazdır.">
+<meta name="theme-color" content="#f2f3ef" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#161a1a" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="tr_TR">
+<meta property="og:site_name" content="Bulmaca Masası">
+<meta property="og:title" content="Bulmaca Masası">
+<meta property="og:description" content="Türkçe kare bulmaca: her seferinde yeni, anında kuruluyor. 5×5'ten 23×23'e boyutunu seç, tarayıcında çöz, kaydet ve yazdır.">
+<link rel="stylesheet" href="yazitipleri/fonts.css">
+<style>
+  /* ============ Tokens ============ */
+  :root {
+    --paper: #f2f3ef;
+    --paper-raised: #ffffff;
+    --ink: #1e2a2e;
+    --ink-soft: #55625f;
+    --line: #c9cdc4;
+    --line-soft: #dcdfd7;
+    --block: #23302f;
+    --accent: #2a6f77;
+    --accent-ink: #ffffff;
+    --highlight: #eeb454;
+    --highlight-ink: #2a2010;
+    --success: #3f7d4a;
+    --success-bg: #e3efe2;
+    --error: #b8503f;
+    --error-bg: #f7e6e1;
+    --focus-ring: #2a6f77;
+    --font-display: "Fraunces", Georgia, serif;
+    --font-body: "Karla", "Segoe UI", sans-serif;
+    --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #161a1a;
+      --paper-raised: #1e2423;
+      --ink: #ece9e2;
+      --ink-soft: #a3aca8;
+      --line: #3a423f;
+      --line-soft: #2b322f;
+      --block: #0a0e0d;
+      --accent: #59b6bd;
+      --accent-ink: #0d2224;
+      --highlight: #f2b354;
+      --highlight-ink: #2a2010;
+      --success: #7bc98a;
+      --success-bg: #1c2e20;
+      --error: #e08a78;
+      --error-bg: #33201c;
+      --focus-ring: #59b6bd;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #161a1a;
+    --paper-raised: #1e2423;
+    --ink: #ece9e2;
+    --ink-soft: #a3aca8;
+    --line: #3a423f;
+    --line-soft: #2b322f;
+    --block: #0a0e0d;
+    --accent: #59b6bd;
+    --accent-ink: #0d2224;
+    --highlight: #f2b354;
+    --highlight-ink: #2a2010;
+    --success: #7bc98a;
+    --success-bg: #1c2e20;
+    --error: #e08a78;
+    --error-bg: #33201c;
+    --focus-ring: #59b6bd;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--paper);
+    background-image:
+      linear-gradient(var(--line-soft) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line-soft) 1px, transparent 1px);
+    background-size: 28px 28px;
+    color: var(--ink);
+    font-family: var(--font-body);
+    min-height: 100vh;
+    padding: clamp(14px, 3vw, 36px);
+  }
+
+  .sayfa {
+    max-width: 1320px;
+    margin: 0 auto;
+  }
+
+  /* ============ Header ============ */
+  header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 22px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid var(--ink);
+  }
+  .baslik-grubu { display: flex; flex-direction: column; gap: 4px; }
+  .kicker {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 600;
+  }
+  h1 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(1.9rem, 4vw, 2.6rem);
+    margin: 0;
+    text-wrap: balance;
+    letter-spacing: -0.01em;
+  }
+  .alt-baslik {
+    color: var(--ink-soft);
+    font-size: 0.92rem;
+    max-width: 46ch;
+  }
+
+  .kontrol-cubugu {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  button {
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 0.88rem;
+    border: 2px solid var(--ink);
+    background: var(--paper-raised);
+    color: var(--ink);
+    padding: 9px 16px;
+    cursor: pointer;
+    border-radius: 3px;
+    transition: transform 0.08s ease, background 0.15s ease;
+  }
+  button:hover { background: var(--line-soft); }
+  button:active { transform: translateY(1px); }
+  button:focus-visible { outline: 3px solid var(--focus-ring); outline-offset: 2px; }
+  button.birincil {
+    background: var(--accent);
+    color: var(--accent-ink);
+    border-color: var(--accent);
+  }
+  button.birincil:hover { filter: brightness(1.08); }
+  button.ikincil { background: transparent; }
+
+  .istatistik {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--ink-soft);
+    display: flex;
+    gap: 14px;
+    align-items: center;
+  }
+  .istatistik b { color: var(--ink); font-variant-numeric: tabular-nums; }
+
+  .boyut-secici {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--ink-soft);
+  }
+  .boyut-secici label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .boyut-secici select {
+    font-family: var(--font-mono);
+    font-weight: 600;
+    font-size: 0.82rem;
+    color: var(--ink);
+    background: var(--paper-raised);
+    border: 2px solid var(--ink);
+    border-radius: 3px;
+    padding: 5px 6px;
+    text-align: center;
+  }
+  .boyut-secici select:focus-visible {
+    outline: 3px solid var(--focus-ring);
+    outline-offset: 1px;
+  }
+
+  .durum-mesaji {
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    color: var(--ink-soft);
+    min-height: 1.4em;
+    margin: -10px 0 18px;
+  }
+  .durum-mesaji.uyari { color: var(--error); }
+  .durum-mesaji.iyi { color: var(--accent); }
+  .durum-mesaji button.onay-buton {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    font-weight: 600;
+    border: 1.5px solid currentColor;
+    background: transparent;
+    color: inherit;
+    padding: 3px 10px;
+    margin-left: 8px;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+  .durum-mesaji button.onay-buton:hover { background: color-mix(in srgb, currentColor 15%, transparent); }
+  .durum-mesaji button.onay-buton:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+  .durum-mesaji input.kayit-adi-girdi {
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    border: 1.5px solid currentColor;
+    background: var(--paper-raised);
+    color: var(--ink);
+    padding: 3px 8px;
+    border-radius: 3px;
+    width: min(320px, 60vw);
+    margin: 0 4px;
+  }
+  .durum-mesaji input.kayit-adi-girdi:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 1px; }
+
+  /* ============ Kaydedilen bulmacalar paneli ============ */
+  .kayit-overlay {
+    position: fixed;
+    inset: 0;
+    background: color-mix(in srgb, var(--block) 55%, transparent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    z-index: 50;
+  }
+  /* `hidden` özniteliğinin tarayıcı varsayılan [hidden]{display:none} kuralı,
+     buradaki .kayit-overlay{display:flex} yazar kuralı tarafından geçersiz
+     kılınabiliyor (yazar CSS'i, aynı özgüllükte olsa bile UA stiline karşı
+     her zaman kazanır) -- yazdırma hatasında keşfedilenle AYNI kalıp,
+     burada da açıkça ele alınması gerekiyor. */
+  .kayit-overlay[hidden] { display: none; }
+  .kayit-panel {
+    background: var(--paper);
+    border: 2px solid var(--ink);
+    border-radius: 6px;
+    width: min(560px, 100%);
+    max-height: min(640px, 86vh);
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 12px 32px color-mix(in srgb, var(--block) 35%, transparent);
+  }
+  .kayit-panel-ust {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 16px 18px;
+    border-bottom: 2px solid var(--ink);
+  }
+  .kayit-panel-ust h2 {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    margin: 0;
+  }
+  .kayit-liste {
+    overflow-y: auto;
+    padding: 10px 18px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .kayit-bos {
+    color: var(--ink-soft);
+    font-size: 0.9rem;
+    padding: 14px 2px;
+  }
+  .kayit-oge {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 12px;
+    border: 1.5px solid var(--line);
+    border-radius: 4px;
+    background: var(--paper-raised);
+  }
+  .kayit-oge-bilgi { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+  .kayit-oge-ad {
+    font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .kayit-oge-detay {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--ink-soft);
+  }
+  .kayit-oge-aksiyon { display: flex; gap: 6px; flex-shrink: 0; }
+  .kayit-oge-aksiyon button { padding: 6px 12px; font-size: 0.8rem; }
+  .kayit-sil-onay { color: var(--error); border-color: var(--error) !important; }
+  .kayit-aktif-etiket {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 400;
+    color: var(--accent);
+  }
+
+  /* ============ Kronometre ============
+     98. Adım (kullanıcı talebi -- HaberTürk'ün bulmaca sayfasındaki süre
+     sayacı örnek verildi): Başlat/Durdur düğmesiyle çalışan, saniyeyi sayan
+     bir süre göstergesi. Durdurulduğunda, kullanıcı deneyimi referans
+     görseldeki gibi -- ortada "Yarıda bıraktın!" uyarısı ve devam etmek
+     için tek bir "Devam Et" düğmesi içeren bir modal (bkz. .duraklat-overlay
+     aşağıda, `.kayit-overlay` ile AYNI kanıtlanmış modal deseni).
+     100. Adım (kullanıcı talebi -- birebir: "kronometre farkli renkte olsun/
+     baslat d]gmedinin kronometreye ait ldgi anlasilsin. Koromotre ve dugesi
+     farkli bir yerlesimde ama farkedilebilir olsun"): diğer düğmelerle
+     (hepsi aynı nötr `.ikincil` görünümde) karışmasın diye kronometre artık
+     kendi rengiyle -- ızgaradaki "aktif hücre" vurgusuyla AYNI `--highlight`
+     (kehribar/amber) tonuyla -- ayrı, yuvarlak kenarlı bir "hap" (pill)
+     rozeti içinde gösteriliyor; Başlat/Durdur düğmesi de AYNI rengi
+     taşıyarak süreyle birlikte tek bir görsel birim oluşturuyor -- bu,
+     satırdaki diğer düz/nötr düğmelerden kendiliğinden ayrışan, farklı
+     bir yerleşim/görünüm. */
+  .kronometre {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 4px 4px 14px;
+    border: 2px solid var(--highlight);
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--highlight) 18%, var(--paper-raised));
+  }
+  .kronometre-sure {
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: 0.92rem;
+    color: var(--highlight-ink);
+    font-variant-numeric: tabular-nums;
+    min-width: 3.4em;
+    text-align: center;
+  }
+  .kronometre button {
+    background: var(--highlight);
+    color: var(--highlight-ink);
+    border-color: var(--highlight);
+    border-radius: 999px;
+  }
+  .kronometre button:hover { filter: brightness(1.06); background: var(--highlight); }
+  .kronometre button:disabled { opacity: 0.5; cursor: default; filter: none; }
+
+  /* 98. Adım: `.duraklat-overlay`, `.kayit-overlay` ile AYNI kanıtlanmış
+     modal deseni -- tam ekran, ortalanmış, karartılmış arka plan. Aynı
+     [hidden] geçersiz kılma ihtiyacı burada da geçerli (bkz. yukarıdaki
+     .kayit-overlay yorumu -- yazar `display:flex` kuralı, [hidden]'in
+     varsayılan `display:none` kuralına karşı kazanabiliyor). */
+  .duraklat-overlay {
+    position: fixed;
+    inset: 0;
+    background: color-mix(in srgb, var(--block) 55%, transparent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    z-index: 60;
+  }
+  .duraklat-overlay[hidden] { display: none; }
+  .duraklat-panel {
+    background: var(--paper);
+    border: 2px solid var(--ink);
+    border-radius: 6px;
+    padding: 30px 34px;
+    max-width: min(360px, 100%);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    box-shadow: 0 12px 32px color-mix(in srgb, var(--block) 35%, transparent);
+  }
+  .duraklat-panel h2 {
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+    margin: 0;
+  }
+  .duraklat-panel button {
+    padding: 10px 28px;
+  }
+
+  /* ============ Layout ============ */
+  .govde {
+    display: grid;
+    /* 96. Adım (kullanıcı talebi): tanımlar-panel sütunu genişletildi --
+       önceki 280-380px aralığı iki alt sütuna bölününce tanımların
+       birkaç satıra bölünmesine yol açıyordu; 360-560px ile birçok
+       tanım artık tek satıra sığıyor. */
+    grid-template-columns: minmax(0, 1fr) minmax(360px, 560px);
+    gap: 28px;
+    align-items: start;
+  }
+  @media (max-width: 860px) {
+    .govde { grid-template-columns: 1fr; }
+  }
+
+  .grid-cerceve {
+    background: var(--paper-raised);
+    border: 2px solid var(--ink);
+    padding: clamp(8px, 1.6vw, 16px);
+    border-radius: 4px;
+    box-shadow: 4px 4px 0 var(--line);
+    position: relative; /* 80. Adım: #yukleniyor-katmani'nin üstte ortalanabilmesi için */
+  }
+
+  #bulmaca-grid {
+    display: grid;
+    /* grid-template-columns/rows ve aspect-ratio JS tarafından, seçilen
+       satır/sütun sayısına göre satır içi (inline) stil olarak ayarlanır. */
+    width: 100%;
+    border: 1px solid var(--ink);
+  }
+
+  /* 85. Adım (kullanıcı bulgusu -- 84. Adım'da teşhis edildi): bazı
+     tarayıcı/yazdırma motorlarında CSS Grid (display:grid +
+     grid-template-columns) yazdırma çıktısında doğru uygulanmıyor -- ızgara,
+     12 sütunlu bir tablo yerine tüm hücrelerin tek sütunda alt alta dizildiği
+     bozuk bir listeye dönüşüyor. Yazdırma belgesi (bkz. izgaraYazdirTablosuHtml,
+     yazdirIcinBelgeOlustur) bu yüzden ekrandaki CSS Grid ızgarasını KLONLAMAK
+     yerine, onlarca yıldır her yazdırma/PDF motorunda güvenilir şekilde
+     desteklenen klasik bir HTML <table> olarak YENİDEN üretiyor. Ekrandaki
+     asıl bulmaca (#bulmaca-grid, üstteki kural) hiç değişmedi -- bu yalnızca
+     yazdırma belgesine özel, ayrı bir ızgara gösterimi. */
+  .yazdir-tablosu {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+    border: 1px solid var(--ink);
+  }
+  .yazdir-tablosu td.yazdir-hucre {
+    position: relative;
+    border: 1px solid var(--ink);
+    padding: 0;
+    height: 2.3em;
+    background: var(--paper-raised);
+  }
+  .yazdir-tablosu td.yazdir-hucre.bos-kare {
+    background: var(--block);
+  }
+
+  /* 87. Adım: tanım listesinin CSS çalışan ortamlarda güzel görünmesi için
+     (bkz. tanimlarYazdirHtml) -- CSS çalışmadığında bu kurallar zaten
+     uygulanmaz ve <table border=0>/<b> gibi öz nitelikler tek başına
+     yeterli, okunabilir bir görünüm sağlar (yukarıdaki 87. Adım yorumuna
+     bkz). */
+  .yazdir-liste-baslik {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.95rem;
+    margin: 14px 0 6px;
+  }
+  .yazdir-liste-baslik:first-child { margin-top: 0; }
+  .yazdir-tanim-tablosu { width: 100%; border-collapse: collapse; }
+  .yazdir-tanim-tablosu td { padding: 3px 4px; vertical-align: top; font-size: 0.88rem; }
+  .yazdir-tanim-numara {
+    font-family: var(--font-mono);
+    font-weight: 700;
+    color: var(--accent);
+  }
+
+  /* 80. Adım (kullanıcı talebi): bulmaca üretilirken bulmaca karesinin
+     İÇİNDE büyük harflerle bir "hazırlanıyor" mesajı -- küçük durum
+     satırındaki metne ek olarak, üretim süren onlarca saniye boyunca
+     boş kalan ızgara alanını kaplar. */
+  .yukleniyor-katmani {
+    display: none;
+    position: absolute;
+    inset: 0;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 12px;
+    background: var(--paper-raised);
+    border-radius: 2px;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(1.3rem, 5vw, 2.4rem);
+    color: var(--ink);
+    letter-spacing: 0.02em;
+    z-index: 5;
+  }
+  .yukleniyor-katmani.gorunur { display: flex; }
+
+  .hucre {
+    position: relative;
+    background: var(--paper-raised);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 0;
+    min-height: 0;
+    /* Hücreler arasındaki çizgiler `gap` yerine HER hücrenin kendi
+       kenarlığıyla çiziliyor -- `gap: 1px` + arka plan rengi yöntemi,
+       kesirli (1fr) sütun genişliklerinde tarayıcının alt-piksel
+       yuvarlamasıyla bazı çizgilerin (özellikle belirli grid
+       boyutlarında) tamamen kaybolmasına yol açabiliyordu. Kenarlık
+       her hücrede bağımsız çizildiği için bu yuvarlama sorunundan
+       etkilenmiyor. */
+    border: 1px solid var(--ink);
+  }
+  .hucre.bos-kare { background: var(--block); }
+
+  .hucre input {
+    width: 100%;
+    height: 100%;
+    border: none;
+    background: transparent;
+    text-align: center;
+    padding: 0;
+    font-family: var(--font-mono);
+    font-weight: 600;
+    font-size: clamp(0.55rem, 1.7vw, 1.05rem);
+    color: var(--ink);
+    text-transform: uppercase;
+    caret-color: var(--accent);
+  }
+  .hucre input:focus { outline: none; }
+  .hucre.aktif-hucre { background: var(--highlight); }
+  .hucre.aktif-hucre input { color: var(--highlight-ink); }
+  .hucre.aktif-kelime { background: color-mix(in srgb, var(--highlight) 32%, var(--paper-raised)); }
+  .hucre.dogru { background: var(--success-bg); }
+  .hucre.dogru input { color: var(--success); }
+  .hucre.yanlis { background: var(--error-bg); }
+  .hucre.yanlis input { color: var(--error); }
+  .hucre.aktif-hucre.dogru,
+  .hucre.aktif-hucre.yanlis { background: var(--highlight); }
+
+  .hucre-numara {
+    position: absolute;
+    top: 1px;
+    left: 2px;
+    font-family: var(--font-mono);
+    font-size: clamp(0.35rem, 1vw, 0.6rem);
+    color: var(--ink-soft);
+    line-height: 1;
+    pointer-events: none;
+    font-weight: 600;
+  }
+  .hucre.aktif-hucre .hucre-numara,
+  .hucre.aktif-kelime .hucre-numara { color: inherit; opacity: 0.75; }
+
+  /* ============ Clue panel ============
+     95. Adım (kullanıcı talebi -- gazete bulmacalarındaki gibi): iki yön
+     artık sekmeyle birbirini GİZLEMİYOR, aynı anda YAN YANA iki sütun
+     olarak gösteriliyor. Eski `.tanimlar-sekmeler`/sekme-tıklayıp-gizleme
+     mimarisi `.tanimlar-sutunlar`/`.tanimlar-sutun` ile değiştirildi;
+     `sekme-yatay`/`sekme-dikey`/`liste-yatay`/`liste-dikey` id'leri ve
+     onlara bağlı JS (sekmeSec, vurgulariGuncelle, kayıt yükleme/kaydetme)
+     AYNEN korunuyor -- sadece artık liste görünürlüğünü DEĞİL, aktif yön
+     vurgusunu kontrol ediyor (bkz. proje notları "95. Adım"). */
+  .tanimlar-panel {
+    background: var(--paper-raised);
+    border: 2px solid var(--ink);
+    border-radius: 4px;
+    box-shadow: 4px 4px 0 var(--line);
+    display: flex;
+    flex-direction: column;
+    max-height: min(720px, 80vh);
+    overflow: hidden;
+  }
+  .tanimlar-sutunlar {
+    display: flex;
+    flex: 1 1 auto;
+    min-height: 0;
+  }
+  .tanimlar-sutun {
+    flex: 1 1 0;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
+  .tanimlar-sutun + .tanimlar-sutun { border-left: 2px solid var(--ink); }
+  .tanimlar-sutun-baslik {
+    flex: 0 0 auto;
+    width: 100%;
+    border: none;
+    border-radius: 0;
+    border-bottom: 2px solid var(--ink);
+    background: var(--paper-raised);
+    color: var(--ink);
+    font-family: var(--font-display);
+    font-size: 0.9rem;
+    font-weight: 600;
+    padding: 9px 8px;
+    text-align: center;
+    cursor: pointer;
+  }
+  .tanimlar-sutun-baslik.secili-sekme { background: var(--ink); color: var(--paper); }
+  .tanimlar-sutun-baslik:focus-visible { outline-offset: -3px; }
+
+  .tanimlar-liste {
+    list-style: none;
+    margin: 0;
+    padding: 8px;
+    overflow-y: auto;
+    flex: 1 1 auto;
+    min-height: 0;
+  }
+  @media (max-width: 520px) {
+    .tanimlar-sutunlar { flex-direction: column; }
+    .tanimlar-sutun + .tanimlar-sutun { border-left: none; border-top: 2px solid var(--ink); }
+    .tanimlar-liste { max-height: 260px; }
+  }
+  .tanim-oge {
+    display: flex;
+    gap: 10px;
+    padding: 9px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+    align-items: baseline;
+    line-height: 1.35;
+  }
+  .tanim-oge:hover { background: var(--line-soft); }
+  .tanim-oge.aktif-tanim { background: var(--highlight); color: var(--highlight-ink); }
+  .tanim-numara {
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: 0.82rem;
+    min-width: 1.6em;
+    text-align: right;
+    color: var(--accent);
+    flex-shrink: 0;
+  }
+  .aktif-tanim .tanim-numara { color: inherit; }
+  .tanim-metin { font-size: 0.88rem; }
+  .tanim-uzunluk {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--ink-soft);
+    opacity: 0.8;
+  }
+  .aktif-tanim .tanim-uzunluk { color: inherit; opacity: 0.7; }
+
+  /* ============ Banner ============ */
+  #kutlama {
+    margin-top: 18px;
+    padding: 16px 20px;
+    background: var(--success-bg);
+    border: 2px solid var(--success);
+    color: var(--success);
+    border-radius: 4px;
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    font-weight: 600;
+    display: none;
+    align-items: center;
+    gap: 10px;
+  }
+  #kutlama.gorunur { display: flex; }
+  @media (prefers-reduced-motion: no-preference) {
+    #kutlama.gorunur { animation: belirme 0.4s ease; }
+  }
+  @keyframes belirme {
+    from { opacity: 0; transform: translateY(-6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  footer {
+    margin-top: 26px;
+    font-size: 0.78rem;
+    color: var(--ink-soft);
+    text-align: center;
+  }
+
+  .gorsel-gizli {
+    position: absolute;
+    width: 1px; height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+  }
+
+
+  /* ============ Mobil (telefon / tablet) -- 99+. Adım ============
+     1) `hidden` öznitelikli zorluk seçici ve istatistik çubuğu, yukarıdaki
+        `display:flex` yazar kuralları yüzünden (aynı [hidden] tuzağı, bkz.
+        .kayit-overlay) 80/81. Adım'dan beri GÖRÜNÜYORDU; burada düzeltildi.
+     2) Dar ekranda ipucu paneli çöküyordu (yükseklik, yan yana düzendeki
+        ızgara satırına bağlıydı); tek sütunda kendi yüksekliği veriliyor.
+     3) Dokunmatik cihazlarda tarayıcı klavyesi yerine alttaki sabit
+        "dock" (ipucu şeridi + Türkçe Q ekran klavyesi) kullanılıyor. */
+  .boyut-secici[hidden], .istatistik[hidden], .istatistik span[hidden] { display: none; }
+
+  .mobil-dock { display: none; }
+  body.ekran-klavyesi .mobil-dock:not([hidden]) {
+    display: block;
+    position: fixed;
+    left: 0; right: 0; bottom: 0;
+    z-index: 40;
+    background: var(--paper-raised);
+    border-top: 2px solid var(--ink);
+    padding: 6px 6px calc(6px + env(safe-area-inset-bottom, 0px));
+    box-shadow: 0 -6px 18px color-mix(in srgb, var(--block) 18%, transparent);
+  }
+  .dock-icerik { max-width: 560px; margin: 0 auto; }
+  .mobil-dock button {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+  .dock-ipucu { display: flex; gap: 6px; align-items: stretch; margin-bottom: 6px; }
+  .dock-ok {
+    flex: 0 0 44px;
+    padding: 0;
+    font-size: 1.6rem;
+    line-height: 1;
+    background: var(--paper);
+  }
+  .dock-metin {
+    flex: 1 1 auto;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    text-align: left;
+    background: var(--paper);
+    font-weight: 500;
+    font-size: 0.9rem;
+    line-height: 1.25;
+    padding: 4px 10px;
+    min-height: 46px;
+  }
+  .dock-yazi {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .dock-no { font-family: var(--font-mono); font-weight: 700; color: var(--accent); margin-right: 4px; }
+  .dock-uzunluk { font-family: var(--font-mono); font-size: 0.74rem; color: var(--ink-soft); }
+  .dock-klavye { display: flex; flex-direction: column; gap: 6px; }
+  .dock-sira { display: flex; gap: 4px; justify-content: center; }
+  .tus {
+    flex: 0 0 calc((100% - 44px) / 12);
+    height: 46px;
+    min-width: 0;
+    padding: 0;
+    font-family: var(--font-mono);
+    font-size: 1.05rem;
+    font-weight: 600;
+    border-radius: 5px;
+    background: var(--paper);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .tus-sil { flex: 0 0 calc(((100% - 44px) / 12) * 2 + 4px); }
+  .tus:active, .dock-ok:active { background: var(--highlight); color: var(--highlight-ink); }
+  body.ekran-klavyesi .hucre input {
+    caret-color: transparent;
+    cursor: pointer;
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .hucre input, .tanim-oge { touch-action: manipulation; }
+
+  @media screen and (max-width: 860px) {
+    .tanimlar-panel { max-height: none; }
+    .tanimlar-sutunlar { flex: none; }
+    .tanimlar-liste { flex: none; max-height: min(340px, 45vh); }
+    .grid-cerceve { container-type: inline-size; }
+    .hucre input { font-size: calc(100cqw / var(--n, 13) * 0.5); }
+    .hucre-numara { font-size: max(6px, calc(100cqw / var(--n, 13) * 0.27)); }
+  }
+
+  @media screen and (max-width: 600px) {
+    body { padding: 10px 10px 14px; }
+    body.ekran-klavyesi { padding-bottom: calc(var(--dock-yuk, 230px) + 16px); }
+    header { margin-bottom: 8px; padding-bottom: 8px; gap: 8px; }
+    .baslik-grubu { width: 100%; }
+    .kicker, .alt-baslik { display: none; }
+    h1 { font-size: 1.45rem; }
+    .kontrol-cubugu {
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 6px;
+    }
+    .kontrol-cubugu > .boyut-secici { justify-content: flex-start; }
+    .kontrol-cubugu > .boyut-secici select { font-size: 1rem; padding: 6px; }
+    .kontrol-cubugu > .kronometre { grid-column: span 2; justify-content: space-between; }
+    .kontrol-cubugu button { padding: 9px 4px; font-size: 0.8rem; min-height: 40px; }
+    #btn-yazdir { display: none; }
+    #btn-yeni { grid-column: span 2; }
+    .durum-mesaji { margin: 0 0 8px; }
+    .durum-mesaji input.kayit-adi-girdi { font-size: 16px; }
+    .grid-cerceve { padding: 6px; box-shadow: 2px 2px 0 var(--line); }
+    .govde { gap: 14px; }
+    /* Telefonda iki sütun yerine iki sekme: yalnızca seçili yönün listesi görünür. */
+    .tanimlar-sutunlar { display: grid; grid-template-columns: 1fr 1fr; }
+    .tanimlar-sutun { display: contents; }
+    #sekme-yatay { grid-column: 1; grid-row: 1; }
+    #sekme-dikey { grid-column: 2; grid-row: 1; border-left: 2px solid var(--ink); }
+    #liste-yatay, #liste-dikey { grid-column: 1 / -1; grid-row: 2; max-height: none; overflow: visible; }
+    .tanimlar-sutunlar:has(#sekme-yatay.secili-sekme) #liste-dikey { display: none; }
+    .tanimlar-sutunlar:has(#sekme-dikey.secili-sekme) #liste-yatay { display: none; }
+    footer { margin-top: 16px; }
+  }
+  @media print { .mobil-dock { display: none !important; } }
+
+  /* ============ Yazdırma / PDF ============
+     "Yazdır / PDF" butonu tarayıcının native window.print() iletişim
+     kutusunu açar (harici kütüphane kullanılmıyor -- projenin genel
+     "bağımlılıksız" yaklaşımıyla tutarlı); kullanıcı bu kutudan
+     "PDF olarak kaydet"i seçebilir. Çıktı: BOŞ (cevapsız) kare matris +
+     her iki yöndeki tüm sorular -- kullanıcının o an kutulara yazdığı
+     harfler (varsa) print-color-adjust ile görünmez kılınıyor, böylece
+     üzerine yazılabilir/tekrar çözülebilir bir çıktı garanti ediliyor. */
+  .yazdir-baslik { display: none; }
+
+  @media print {
+    body { background: #fff; }
+    header .kontrol-cubugu,
+    #durum-mesaji,
+    #kutlama,
+    #yukleniyor-katmani,
+    footer,
+    .tanimlar-sutun-baslik { display: none !important; }
+
+    .yazdir-baslik {
+      display: block;
+      font-family: var(--font-display);
+      font-size: 1rem;
+      font-weight: 600;
+      margin: 4px 0 14px;
+      color: #000;
+    }
+
+    .govde { display: block; }
+    .grid-cerceve {
+      box-shadow: none;
+      border: 2px solid #000;
+      max-width: 480px;
+      margin: 0 auto 22px;
+      break-inside: avoid;
+      page-break-inside: avoid;
+    }
+    #bulmaca-grid,
+    .hucre,
+    .grid-cerceve,
+    .yazdir-tablosu,
+    .yazdir-hucre { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .hucre { border-color: #000; }
+    .hucre.bos-kare { background: #000 !important; }
+    .hucre input { color: transparent !important; caret-color: transparent !important; }
+    .hucre-numara { color: #000; }
+    /* 85. Adım: yazdırma <table> ızgarası için aynı siyah kare/kenarlık kuralları. */
+    .yazdir-tablosu { border-color: #000; }
+    .yazdir-hucre { border-color: #000; }
+    .yazdir-hucre.bos-kare { background: #000 !important; }
+    .hucre.aktif-hucre,
+    .hucre.aktif-kelime,
+    .hucre.dogru,
+    .hucre.yanlis { background: var(--paper-raised) !important; }
+    /* 87. Adım: tanım listesi başlığı/numarası yazdırmada siyah olmalı. */
+    .yazdir-liste-baslik { color: #000; }
+    .yazdir-tanim-numara { color: #000; }
+
+    /* NOT (düzeltme): İki soru listesini TEK bir çok-sütunlu (column-count)
+       kapsayıcı içinde birleştirmek, gömülü/sandbox'lı görüntüleme
+       ortamlarında (ör. Claude'un Artifact önizleme iframe'i) yükseklik
+       hesaplaması güvenilir çalışmadığı için bazı soruların çıktıda hiç
+       görünmemesine yol açtı (kullanıcı raporu: 17×17 boyutunda "çoğu soru
+       çıkmadı"). Çözüm: çok sütunlu (masonry) düzen TAMAMEN kaldırıldı --
+       her iki liste artık basit, tek sütunlu, doğal akışlı bloklar olarak
+       art arda yazdırılıyor. Bu, sayfalar arası bölünmeyi tarayıcının en
+       sağlam/en iyi test edilmiş yoluna (normal blok akışı) bırakıyor;
+       tek bedeli biraz daha fazla sayfa kullanılması -- karşılığında HİÇBİR
+       soru kaybolmuyor.  */
+    .tanimlar-panel {
+      box-shadow: none;
+      border: none;
+      max-height: none;
+      overflow: visible;
+      display: block;
+    }
+    /* 95. Adım: ekranda yan yana duran iki sütun, yazdırmada eskisi gibi
+       art arda (üst üste) tam genişlikte bloklara dönüyor -- 85-89.
+       Adım'larda kanıtlanmış en sağlam yazdırma davranışı korunuyor. */
+    .tanimlar-sutunlar { display: block; }
+    .tanimlar-sutun { display: block; border: none !important; }
+    .tanimlar-liste[hidden] { display: block !important; }
+    .tanimlar-liste {
+      overflow: visible;
+      padding: 0;
+    }
+    .tanimlar-sutun + .tanimlar-sutun .tanimlar-liste { margin-top: 14px; }
+    .tanimlar-liste::before {
+      content: attr(data-yazdir-baslik);
+      display: block;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 0.95rem;
+      margin: 0 0 6px;
+      break-after: avoid;
+    }
+    /* NOT (3. düzeltmenin devamı -- sayfa sınırında metin çakışması/bölünmesi):
+       Kullanıcının yükledi ikinci gerçek PDF'te, sayfa 1/2 sınırına denk gelen
+       bir soru öğesinin (`.tanim-oge`) `break-inside: avoid`e RAĞMEN iki
+       satırının ayrı sayfalara bölündüğü (ve bir kısmının sayfa kenarında
+       kırpılmış/çakışmış göründüğü) gözlemlendi. `.tanim-oge` normal
+       görünümde `display: flex` (numara + metin yan yana) kullanıyor; flex
+       kapsayıcıların CSS Fragmentation (sayfalar arası bölünme) davranışı,
+       modern tarayıcılarda düz blok/satır-içi öğelere göre daha az olgun ve
+       daha az tutarlı uygulanıyor -- gerçek Chrome yazdırma motorunda bu,
+       `break-inside: avoid` kuralının bir flex öğesi için güvenilmez şekilde
+       yok sayılmasına yol açabiliyor (headless `page.pdf()` testimizde
+       yeniden üretilemedi, tıpkı önceki [hidden] sorunu gibi). Çözüm: yazdırma
+       için `.tanim-oge` flex'ten TAMAMEN çıkarılıp düz `display: block` +
+       klasik "asılı girinti" (hanging indent) tekniğine (`text-indent`
+       negatif + `padding-left`) geçirildi -- bu, onlarca yıldır dipnot/
+       kaynakça gibi yazdırılan listelerde kullanılan, sayfa bölünmesi
+       konusunda en sağlam/en iyi test edilmiş düz metin akışı yöntemi. */
+    .tanim-oge {
+      display: block;
+      break-inside: avoid;
+      page-break-inside: avoid;
+      padding: 3px 0 3px 2.3em;
+      text-indent: -2.3em;
+      cursor: default;
+    }
+    .tanim-oge:hover,
+    .tanim-oge.aktif-tanim { background: transparent !important; color: #000 !important; }
+    .tanim-numara {
+      display: inline-block;
+      width: 1.6em;
+      margin-right: 0.5em;
+      color: #000;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="sayfa">
+  <header>
+    <div class="baslik-grubu">
+      <span class="kicker">Her açılışta yeni bir bulmaca</span>
+      <h1>Bulmaca Masası</h1>
+      <p class="alt-baslik">Türkçe kare bulmaca — hazır bir havuzdan değil, her seferinde anında kuruluyor. Boyutu sen seç.</p>
+    </div>
+    <div class="kontrol-cubugu">
+      <div class="boyut-secici">
+        <label for="boyut-sec">Boyut
+          <select id="boyut-sec" disabled>
+            <option value="5">5×5</option>
+            <option value="7">7×7</option>
+            <option value="9">9×9</option>
+            <option value="11">11×11</option>
+            <option value="12">12×12</option>
+            <option value="13">13×13</option>
+            <option value="15" selected>15×15</option>
+            <option value="17">17×17</option>
+            <option value="19">19×19</option>
+            <option value="21">21×21</option>
+            <option value="23">23×23</option>
+          </select>
+        </label>
+      </div>
+      <!-- 80. Adım (kullanıcı talebi): bu sürümde zorluk pulldown'u GUI'de
+           hiç görünmesin. Element DOM'dan tamamen SİLİNMEDİ -- zorlukSecEl'i
+           kullanan JS kod yolları (zorlukGirisiniOku, kayıt yükleme/kaydetme
+           vb.) bozulmasın diye `hidden` ile gizlendi, aşağıdaki tek seçenekli
+           <select> ve içeriği (78. Adım) aynen duruyor. -->
+      <div class="boyut-secici" hidden>
+        <label for="zorluk-sec" title="78. Adım: zorluk filtrelemesi kaldırıldı -- sözlükteki TÜM kelimeler (Kolay/Orta/Zor ayrımı olmadan) tek bir havuz olarak kullanılıyor. Eski Kolay/Zor sistemi koddan silinmedi, sadece şu an devre dışı.">Zorluk
+          <select id="zorluk-sec" disabled>
+            <!-- 78. Adım (kullanıcı talebi): tek zorluk seviyesi -- artık
+                 zorluk filtrelemesi YOK, sözlükteki TÜM kelimeler tek
+                 havuz olarak kullanılıyor (bkz. zorlukGirisiniOku --
+                 "0" değeri "1"/"2"/"3" olmadığı için null döner, eski
+                 davranışla AYNI kod yolu). Eski Kolay/Zor seçenekleri
+                 ve onları besleyen zorlukKademeleriniOlustur/
+                 KELIME_ZORLUK_GRUP altyapısı SİLİNMEDİ/DEĞİŞTİRİLMEDİ,
+                 sadece bu select'ten artık çağrılmıyor. -->
+            <option value="0" selected>Tüm Kelimeler (Tek Seviye)</option>
+          </select>
+        </label>
+      </div>
+      <!-- 81. Adım (kullanıcı talebi): istatistik çubuğu (kelime sayısı,
+           doluluk, siyah kare oranı, min uzunluk) GUI'de artık gösterilmiyor.
+           Elemanlar ve onları güncelleyen istatistikGuncelle() DOM'dan/koddan
+           SİLİNMEDİ -- sadece görsel olarak `hidden` ile gizlendi. -->
+      <div class="istatistik" hidden>
+        <span><b id="ist-kelime">0</b> kelime</span>
+        <span><b id="ist-doluluk">0</b>% dolu</span>
+        <span><b id="ist-siyah">0</b>% siyah</span>
+        <span title="Bulmacadaki en kısa kelimenin uzunluğu -- iskelet üretimi mümkünse 2 ve 3 harfli kelimeleri tamamen eler, bütçe izin vermezse kademeli olarak gevşetir."><b id="ist-kisa">-</b> min uzunluk</span>
+        <span id="ist-zorluk-kutusu" hidden title="Yerleşen kelimelerin gerçek öz/destek dağılımı (bağımsız olarak sayılmıştır) -- öz: hedef zorluğun kendi havuzu (Kolay hedefinde eski Kolay+Orta birlikte; Zor hedefinde sadece Zor), destek: karşı taraftan best-effort ≤%20 oranında gelen kelimeler."><b id="ist-zorluk">-</b></span>
+      </div>
+      <!-- 98. Adım (kullanıcı talebi -- HaberTürk referansı): süre sayacı +
+           Başlat/Durdur düğmesi. Durdurulunca aşağıdaki #duraklat-overlay
+           gösterilir. -->
+      <div class="kronometre">
+        <span class="kronometre-sure" id="kronometre-sure" aria-live="off">00:00</span>
+        <button class="ikincil" id="btn-kronometre" type="button" disabled>Başlat</button>
+      </div>
+      <button class="ikincil" id="btn-kontrol" type="button" disabled>Kontrol Et</button>
+      <button class="ikincil" id="btn-cozum" type="button" disabled>Çözüm</button>
+      <button class="ikincil" id="btn-kaydet" type="button" disabled>Kaydet</button>
+      <button class="ikincil" id="btn-yuklemeler" type="button" disabled>Yarım Bulmacalar</button>
+      <button class="ikincil" id="btn-yazdir" type="button" disabled>Yazdır / PDF</button>
+      <button class="birincil" id="btn-yeni" type="button" disabled>Yeni Bulmaca</button>
+    </div>
+  </header>
+
+  <div id="durum-mesaji" class="durum-mesaji" role="status" aria-live="polite"></div>
+
+  <div id="yazdir-baslik" class="yazdir-baslik" aria-hidden="true"></div>
+
+  <div class="govde">
+    <div class="grid-cerceve">
+      <div id="bulmaca-grid" role="group" aria-label="Kare bulmaca ızgarası"></div>
+      <div id="yukleniyor-katmani" class="yukleniyor-katmani" role="status" aria-live="polite">HAZIRLANIYOR…</div>
+    </div>
+
+    <div class="tanimlar-panel">
+      <div class="tanimlar-sutunlar">
+        <div class="tanimlar-sutun">
+          <button type="button" id="sekme-yatay" class="tanimlar-sutun-baslik secili-sekme" aria-pressed="true">Soldan Sağa</button>
+          <ul class="tanimlar-liste" id="liste-yatay" data-yazdir-baslik="Soldan Sağa"></ul>
+        </div>
+        <div class="tanimlar-sutun">
+          <button type="button" id="sekme-dikey" class="tanimlar-sutun-baslik" aria-pressed="false">Yukarıdan Aşağı</button>
+          <ul class="tanimlar-liste" id="liste-dikey" data-yazdir-baslik="Yukarıdan Aşağı"></ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="kutlama" role="status"><span aria-hidden="true">✓</span> <span id="kutlama-metin">Tebrikler, bulmacayı tamamladın!</span></div>
+
+  <div id="kayit-overlay" class="kayit-overlay" hidden>
+    <div class="kayit-panel" role="dialog" aria-modal="true" aria-labelledby="kayit-panel-baslik">
+      <div class="kayit-panel-ust">
+        <h2 id="kayit-panel-baslik">Yarım Bulmacalar</h2>
+        <button type="button" id="btn-kayit-kapat" class="ikincil">Kapat</button>
+      </div>
+      <div id="kayit-liste" class="kayit-liste"></div>
+    </div>
+  </div>
+
+  <!-- 98. Adım: kronometre durdurulunca gösterilen "yarıda bıraktın" uyarısı. -->
+  <div id="duraklat-overlay" class="duraklat-overlay" hidden>
+    <div class="duraklat-panel" role="dialog" aria-modal="true" aria-labelledby="duraklat-panel-baslik">
+      <h2 id="duraklat-panel-baslik">Yarıda bıraktın!</h2>
+      <button type="button" id="btn-kronometre-devam" class="birincil">Devam Et</button>
+    </div>
+  </div>
+
+  <footer><b>DENEME SÜRÜMÜ</b> — herkese açık değildir, sayaç yoktur. Kelimeler ve ipuçları özgün olarak yazılmıştır (~77.500 kelime). Kaydettikleriniz yalnızca bu cihazın tarayıcısında saklanır. <span style="opacity:.5">(sürüm 2026-10-10-g104)</span></footer>
+</div>
+
+<div id="mobil-dock" class="mobil-dock" hidden>
+  <div class="dock-icerik">
+    <div class="dock-ipucu">
+      <button type="button" id="dock-onceki" class="dock-ok" aria-label="Önceki kelime">‹</button>
+      <button type="button" id="dock-metin" class="dock-metin" aria-live="polite" aria-label="İpucu (dokununca yön değişir)"><span class="dock-yazi"></span></button>
+      <button type="button" id="dock-sonraki" class="dock-ok" aria-label="Sonraki kelime">›</button>
+    </div>
+    <div class="dock-klavye" id="dock-klavye"></div>
+  </div>
+</div>
+
+<noscript><p style="max-width:40rem;margin:2rem auto;padding:0 1rem;font-family:sans-serif">Bulmaca Masası tarayıcıda JavaScript ile çalışır. Lütfen JavaScript'i etkinleştirin.</p></noscript>
+<script src="bulmaca.js?v=2026-10-10-g104" defer></script>
+</body>
+</html>
