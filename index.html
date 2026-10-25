@@ -802,8 +802,9 @@
       grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 6px;
     }
-    .kontrol-cubugu > .boyut-secici { justify-content: flex-start; }
-    .kontrol-cubugu > .boyut-secici select { font-size: 1rem; padding: 6px; }
+    .kontrol-cubugu > .boyut-secici { justify-content: flex-start; min-width: 0; }
+    .kontrol-cubugu > .boyut-secici label { flex-direction: column; align-items: stretch; gap: 2px; width: 100%; min-width: 0; }
+    .kontrol-cubugu > .boyut-secici select { font-size: 1rem; padding: 6px; width: 100%; min-width: 0; box-sizing: border-box; }
     .kontrol-cubugu > .kronometre { grid-column: span 2; justify-content: space-between; }
     .kontrol-cubugu button { padding: 9px 4px; font-size: 0.8rem; min-height: 40px; }
     #btn-yazdir { display: none; }
@@ -1074,7 +1075,7 @@
     </div>
   </div>
 
-  <footer><b>DENEME SÜRÜMÜ</b> — herkese açık değildir, sayaç yoktur. Kelimeler ve ipuçları özgün olarak yazılmıştır (~77.500 kelime). Kaydettikleriniz yalnızca bu cihazın tarayıcısında saklanır. <span style="opacity:.5">(sürüm 2026-10-10-g104)</span></footer>
+  <footer><b>DENEME SÜRÜMÜ</b> — herkese açık değildir, sayaç yoktur. Kelimeler ve ipuçları özgün olarak yazılmıştır (~77.500 kelime). Kaydettikleriniz yalnızca bu cihazın tarayıcısında saklanır. <span style="opacity:.5">(sürüm 2026-10-25-g105)</span></footer>
 </div>
 
 <div id="mobil-dock" class="mobil-dock" hidden>
@@ -1090,6 +1091,6 @@
 
 <script>if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) { window.addEventListener('load', function () { navigator.serviceWorker.register('sw.js').catch(function () {}); }); }</script>
 <noscript><p style="max-width:40rem;margin:2rem auto;padding:0 1rem;font-family:sans-serif">Bulmaca Masası tarayıcıda JavaScript ile çalışır. Lütfen JavaScript'i etkinleştirin.</p></noscript>
-<script src="bulmaca.js?v=2026-10-10-g104" defer></script>
+<script src="bulmaca.js?v=2026-10-25-g105" defer></script>
 </body>
 </html>

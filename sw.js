@@ -1,6 +1,6 @@
-// Bulmaca Masası çevrimdışı önbellek (otomatik üretilir: claude/yayin_uret.py). Sürüm 2026-10-10-g104.
-const ONBELLEK = "bulmaca-2026-10-10-g104-330d9f82-deneme";
-const DOSYALAR = ["./", "index.html", "bulmaca.js?v=2026-10-10-g104", "veri/kelime_web.json", "manifest.webmanifest", "favicon.svg", "favicon-32.png", "apple-touch-icon.png", "icon-192.png", "icon-512.png", "yazitipleri/fonts.css", "yazitipleri/fraunces-latin-500.woff2", "yazitipleri/fraunces-latin-ext-500.woff2", "yazitipleri/ibm-plex-mono-latin-500.woff2", "yazitipleri/ibm-plex-mono-latin-600.woff2", "yazitipleri/ibm-plex-mono-latin-700.woff2", "yazitipleri/ibm-plex-mono-latin-ext-500.woff2", "yazitipleri/ibm-plex-mono-latin-ext-600.woff2", "yazitipleri/ibm-plex-mono-latin-ext-700.woff2", "yazitipleri/karla-latin-400.woff2", "yazitipleri/karla-latin-ext-400.woff2"];
+// Bulmaca Masası çevrimdışı önbellek (otomatik üretilir: claude/yayin_uret.py). Sürüm 2026-10-25-g105.
+const ONBELLEK = "bulmaca-2026-10-25-g105-e71f9176-deneme";
+const DOSYALAR = ["./", "index.html", "bulmaca.js?v=2026-10-25-g105", "veri/kelime_web.json", "manifest.webmanifest", "favicon.svg", "favicon-32.png", "apple-touch-icon.png", "icon-192.png", "icon-512.png", "yazitipleri/fonts.css", "yazitipleri/fraunces-latin-500.woff2", "yazitipleri/fraunces-latin-ext-500.woff2", "yazitipleri/ibm-plex-mono-latin-500.woff2", "yazitipleri/ibm-plex-mono-latin-600.woff2", "yazitipleri/ibm-plex-mono-latin-700.woff2", "yazitipleri/ibm-plex-mono-latin-ext-500.woff2", "yazitipleri/ibm-plex-mono-latin-ext-600.woff2", "yazitipleri/ibm-plex-mono-latin-ext-700.woff2", "yazitipleri/karla-latin-400.woff2", "yazitipleri/karla-latin-ext-400.woff2"];
 
 self.addEventListener("install", (olay) => {
   olay.waitUntil(caches.open(ONBELLEK).then((c) => c.addAll(DOSYALAR)).then(() => self.skipWaiting()));

@@ -3288,7 +3288,7 @@ function istatistikGuncelle() {
   // bakmadan doğrudan görebilmesi için.
   yazdirBaslikEl.textContent =
     "Bulmaca Masası — " + GRID_SATIR + "×" + GRID_SUTUN +
-    " — " + bulmaca.yerlesenler.length + " kelime — sürüm 2026-10-10-g104";
+    " — " + bulmaca.yerlesenler.length + " kelime — sürüm 2026-10-25-g105";
 }
 
 function gridiCiz() {
