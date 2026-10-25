@@ -11,6 +11,7 @@
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="tr_TR">
 <meta property="og:site_name" content="Bulmaca Masası">
@@ -1087,6 +1088,7 @@
   </div>
 </div>
 
+<script>if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) { window.addEventListener('load', function () { navigator.serviceWorker.register('sw.js').catch(function () {}); }); }</script>
 <noscript><p style="max-width:40rem;margin:2rem auto;padding:0 1rem;font-family:sans-serif">Bulmaca Masası tarayıcıda JavaScript ile çalışır. Lütfen JavaScript'i etkinleştirin.</p></noscript>
 <script src="bulmaca.js?v=2026-10-10-g104" defer></script>
 </body>
